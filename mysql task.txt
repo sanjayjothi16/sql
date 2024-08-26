@@ -1,0 +1,106 @@
+CH1 - Select Queries 101
+
+SELECT Title FROM Movies;
+SELECT Director FROM Movies;
+SELECT Title, Director FROM Movies;
+SELECT Title, Year FROM Movies;
+SELECT * FROM Movies;
+
+CH2 - Queries with constraints (Pt. 1)
+
+SELECT * FROM Movies WHERE Id = 6;
+SELECT * FROM Movies WHERE Year BETWEEN 2000 AND 2010;
+SELECT * FROM Movies WHERE Year NOT BETWEEN 2000 AND 2010;
+SELECT Title, Year FROM Movies WHERE Id BETWEEN 1 AND 5;
+
+CH3 - Queries with constraints (Pt. 2)
+
+SELECT * FROM Movies WHERE Title LIKE "%Toy Story%";
+SELECT * FROM Movies WHERE Director = "John Lasseter";
+SELECT Title, Director FROM Movies WHERE Director != "John Lasseter";
+SELECT * FROM Movies WHERE Title LIKE "%WALL%";
+
+CH4 - Filtering and sorting Query results
+
+SELECT DISTINCT Director FROM Movies ORDER BY Director;
+SELECT * FROM Movies ORDER BY Year DESC LIMIT 4;
+SELECT * FROM Movies ORDER BY Title ASC LIMIT 5;
+SELECT * FROM Movies ORDER BY Title ASC LIMIT 5 OFFSET 5;
+
+CH5 - Review Simple SELECT Queries
+
+SELECT City, Population FROM North_american_cities WHERE Country = "Canada";
+SELECT * FROM North_american_cities WHERE Country = "United States" ORDER BY Latitude DESC;
+SELECT * FROM North_american_cities WHERE Longitude < -87.629798 ORDER BY Longitude ASC;
+SELECT * FROM North_american_cities WHERE Country = "Mexico" ORDER BY Population DESC LIMIT 2;
+SELECT * FROM North_american_cities WHERE Country = "United States" ORDER BY Population DESC LIMIT 2 OFFSET 2;
+
+CH6 - Multi-table queries with JOINs
+
+SELECT Title, International_sales, Domestic_sales FROM Movies JOIN Boxoffice ON Id = Movie_id;
+SELECT Title, International_sales, Domestic_sales FROM Movies JOIN Boxoffice ON Id = Movie_id WHERE International sales > Domestic_sales;
+SELECT Title, Rating FROM Movies JOIN Boxoffice ON Id = Movie_id ORDER BY Rating DESC;
+
+CH7 - OUTER JOIN
+
+SELECT DISTINCT Building FROM Employees LEFT JOIN Buildings ON Building = Building_name WHERE Building IS NOT NULL;
+SELECT * FROM Buildings;
+SELECT DISTINCT Building_name, Role FROM Buildings LEFT JOIN Employees ON Building_name = Building;
+
+CH8 - A short note on NULLs
+
+SELECT * FROM Employees LEFT JOIN Buildings ON Building_name = Building WHERE Building IS NULL;
+SELECT Building_name FROM Buildings LEFT JOIN Employees ON Building_name = Building WHERE Building IS NULL;
+
+CH9 - Queries with expressions
+
+SELECT Title, (Domestic_sales + International_sales) / 1000000 AS Total_Sales_Millions FROM Movies LEFT JOIN Boxoffice ON Id = Movie_id;
+SELECT Title, Rating * 10 AS Percent FROM Movies LEFT JOIN Boxoffice ON Id = Movie_id;
+SELECT Title, Year FROM Movies LEFT JOIN Boxoffice ON Id = Movie_id WHERE Year % 2 = 0;
+
+CH10 - Queries with aggregates (Pt. 1)
+
+SELECT MAX(Years_employed) FROM Employees;
+SELECT Role, AVG(Years_Employed) FROM Employees GROUP BY Role;
+SELECT Building, SUM(Years_Employed) FROM Employees GROUP BY Building;
+
+CH11 - Queries with aggregates (Pt. 2)
+
+SELECT Role, COUNT(*) AS Number_of_Artists FROM Employees WHERE Role = "Artist";
+SELECT Role, COUNT(*) FROM Employees GROUP BY Role;
+SELECT SUM(Years_Employed) FROM Employees WHERE Role = "Engineer";
+
+CH12 - Order of execution of a Query
+
+SELECT Director, COUNT(Title) FROM Movies GROUP BY Director;
+SELECT Director, SUM(Domestic_sales + International_sales) AS Total_Sales FROM Movies LEFT JOIN Boxoffice ON Id = Movie_id GROUP BY Director;
+
+CH13 - Inserting rows
+
+INSERT INTO Movies (Id, Title, Director, Year, Duration) VALUES (4, "Toy Story 4", "John Lasseter", 2017, 123);
+INSERT INTO Boxoffice (Movie_id, Rating, Domestic_sales, International_sales) VALUES (4, 8.7, 340000000, 270000000);
+
+CH14 - Updating rows
+
+UPDATE Movies SET Director = "John Lasseter" WHERE Id = 2;
+UPDATE Movies SET Year = 1999 WHERE Id = 3;
+UPDATE Movies SET Title = "Toy Story 3", Director = "Lee Unkrich" WHERE Id = 11;
+
+CH15 - Deleting rows
+
+DELETE FROM Movies WHERE Year < 2005;
+DELETE FROM Movies WHERE Director = "Andrew Stanton";
+
+CH16 - Creating Tables
+
+CREATE TABLE Database (Name TEXT, Version FLOAT, Download_Count INTEGER);
+
+CH17 - Altering Tables
+
+ALTER TABLE Movies ADD COLUMN Aspect_ratio FLOAT DEFAULT 3;
+ALTER TABLE Movies ADD COLUMN Language TEXT DEFAULT "English";
+
+CH18 - Dropping Tables
+
+DROP TABLE Movies;
+DROP TABLE Boxoffice;
